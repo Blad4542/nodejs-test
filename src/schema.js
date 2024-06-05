@@ -1,14 +1,15 @@
 const { gql } = require("apollo-server");
-// Define the schema
+
 const typeDefs = gql`
   type User {
     id: ID!
-    firtsName: String!
-    lastName: String!
     email: String!
+    firstName: String!
+    lastName: String!
     gender: String!
-    imageUrl: String!
+    imageUrl: String
     createdAt: String!
+    friends: [User!]!
   }
 
   type Query {
@@ -27,6 +28,15 @@ const typeDefs = gql`
       firstName: String!
       lastName: String!
       gender: String!
+      imageUrl: String
+    ): User!
+    addFriend(userId: ID!, friendId: ID!): User!
+    updateUser(
+      id: ID!
+      email: String
+      firstName: String
+      lastName: String
+      gender: String
       imageUrl: String
     ): User!
   }

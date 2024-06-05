@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongoose").Types;
 const User = require("./models/User");
 
 const resolvers = {
@@ -5,7 +6,9 @@ const resolvers = {
     users: async (_, { pageSize = 10, after }) => {
       let users;
       if (after) {
-        users = await User.find({ _id: { $gt: after } }).limit(pageSize + 1);
+        users = await User.find({ _id: { $gt: new ObjectId(after) } }).limit(
+          pageSize + 1
+        );
       } else {
         users = await User.find().limit(pageSize + 1);
       }
@@ -36,35 +39,36 @@ const resolvers = {
         throw new Error("Users cannot add themselves as friends");
       }
 
-      // Find both users to ensure they exist
-      const user = await User.findById(userId);
-      const friend = await User.findById(friendId);
+      // Convert IDs to ObjectId
+      const userObjectId = new ObjectId(userId);
+      const friendObjectId = new ObjectId(friendId);
+
+      const user = await User.findById(userObjectId);
+      const friend = await User.findById(friendObjectId);
       if (!user || !friend) {
         throw new Error("One or both users not found");
       }
 
-      // Check if the friend is already in the user's friends list
-      if (user.friends.includes(friendId)) {
+      if (user.friends.includes(friendObjectId)) {
         throw new Error("This user is already a friend");
       }
 
-      // Add friend to the user's friends list
-      user.friends.push(friendId);
+      user.friends.push(friendObjectId);
       await user.save();
 
-      return user; // Return the updated user
+      return user;
     },
-  },
-  updateUser: async (
-    _,
-    { id, email, firstName, lastName, gender, imageUrl }
-  ) => {
-    const updatedUser = await User.findByIdAndUpdate(
-      id,
-      { email, firstName, lastName, gender, imageUrl },
-      { new: true }
-    );
-    return updatedUser;
+    updateUser: async (
+      _,
+      { id, email, firstName, lastName, gender, imageUrl }
+    ) => {
+      const updatedUser = await User.findByIdAndUpdate(
+        new ObjectId(id),
+        { email, firstName, lastName, gender, imageUrl },
+        { new: true }
+      );
+      return updatedUser;
+    },
   },
 };
 

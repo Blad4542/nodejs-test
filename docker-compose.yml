@@ -7,10 +7,18 @@ services:
       - "4000:4000"
     environment:
       - NODE_ENV=development
+      - MONGO_URI=mongodb://mongo:27017/testDB
+      - PORT=4000
     depends_on:
       - mongo
+
   mongo:
     container_name: mongo
     image: mongo:latest
     ports:
       - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

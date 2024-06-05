@@ -19,9 +19,7 @@ This project is a GraphQL API for managing users and their friendships. It allow
 
 3. Set up environment variables:
 
-- Copy `.env.example` to `.env` and adjust the variables according to your environment.
-
-4. Start the database and the application with Docker:
+4. Start the database and the application with Docker: docker-compose up --build
 
 ## Usage
 
@@ -30,6 +28,103 @@ Access `http://localhost:4000` in your browser to interact with the GraphQL serv
 ## Endpoints
 
 - `POST /` - for GraphQL queries and mutations.
+
+# Create a new user
+
+mutation {
+createUser(
+email: "user1@test.com",
+firstName: "User",
+lastName: "One",
+gender: "non-binary",
+imageUrl: "http://example.com/image1.jpg"
+) {
+id
+email
+firstName
+lastName
+gender
+imageUrl
+createdAt
+}
+}
+
+# Create another user
+
+mutation {
+createUser(
+email: "user2@test.com",
+firstName: "User",
+lastName: "Two",
+gender: "female",
+imageUrl: "http://example.com/image2.jpg"
+) {
+id
+email
+firstName
+lastName
+gender
+imageUrl
+createdAt
+}
+}
+
+# List users with pagination
+
+query {
+users(pageSize: 2) {
+cursor
+hasMore
+users {
+id
+email
+firstName
+lastName
+gender
+imageUrl
+createdAt
+}
+}
+}
+
+# Add a friend
+
+# Make sure to replace USER_ID_1 and USER_ID_2 with the actual IDs obtained from the list users query
+
+mutation {
+addFriend(userId: "USER_ID_1", friendId: "USER_ID_2") {
+id
+friends {
+id
+email
+firstName
+lastName
+}
+}
+}
+
+# Update user information
+
+# Make sure to replace USER_ID with the actual ID of the user you want to update
+
+mutation {
+updateUser(
+id: "USER_ID",
+email: "updateduser@test.com",
+firstName: "Updated",
+lastName: "User",
+gender: "male",
+imageUrl: "http://example.com/updated-image.jpg"
+) {
+id
+email
+firstName
+lastName
+gender
+imageUrl
+createdAt
+}
+}
 
 ## Features
 

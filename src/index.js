@@ -11,6 +11,6 @@ mongoose.connect(process.env.MONGO_URI, {
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-server.listen({ port: process.env.PORT }).then(({ url }) => {
+server.listen({ port: process.env.PORT, host: "0.0.0.0" }).then(({ url }) => {
   console.log(`🚀 Server ready at ${url}`);
 });
