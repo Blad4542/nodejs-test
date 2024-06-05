@@ -21,6 +21,10 @@ This project is a GraphQL API for managing users and their friendships. It allow
 
 4. Start the database and the application with Docker: docker-compose up --build
 
+5. To run unit test use this command in other terminal: docker exec -it graphql_app /bin/bash
+
+6. Then run npm run test
+
 ## Usage
 
 Access `http://localhost:4000` in your browser to interact with the GraphQL server via Apollo Studio.
